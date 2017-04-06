@@ -5,6 +5,12 @@ namespace pc2x.Paginacion.WCF.Core.Dtos
 {
     public class FacturaDetalleDto
     {
+        public FacturaDetalleDto()
+        {
+            Emisor = new ContribuyenteDto();
+            Receptor = new ContribuyenteDto();
+            Conceptos = new List<ConceptoDto>();
+        }
 
         public string LugarExpedicion { get; set; }
 

@@ -36,7 +36,7 @@ namespace pc2x.Paginacion.Service
 
             if (folio.Length < 10 || folio.Length > 10)
                 throw new ArgumentOutOfRangeException(nameof(folio),
-                    "La longitud del Folio debe ser de 10 caracteres.");
+                    "Error: Folio in correcto, La longitud del Folio debe ser de 10 caracteres.");
 
             return _facturaRepository.GetDetail(folio);
         }

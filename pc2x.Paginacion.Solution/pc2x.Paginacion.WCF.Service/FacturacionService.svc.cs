@@ -55,7 +55,7 @@ namespace pc2x.Paginacion.WCF.Service
             }
             catch (Exception e)
             {
-                throw new FaultException(e.Message);
+                throw new FaultException(e.InnerException?.Message ?? e.Message);
             }
 
         }
@@ -97,7 +97,7 @@ namespace pc2x.Paginacion.WCF.Service
             }
             catch (Exception e)
             {
-                throw new FaultException(e.Message);
+                throw new FaultException(e.InnerException?.Message ?? e.Message);
             }
         }
     }
