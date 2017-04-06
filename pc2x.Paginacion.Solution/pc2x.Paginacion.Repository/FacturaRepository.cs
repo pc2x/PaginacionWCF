@@ -93,5 +93,100 @@ namespace pc2x.Paginacion.Repository
 
             }
         }
+
+        public FacturaDetalleModel GetDetail(string folio)
+        {
+            var model = new FacturaDetalleModel();
+
+            using (var conexion = GetConnection())
+            {
+                //create command
+                var command = new SqlCommand("select * from [ej1].[tvf_GetFacturaDetalle](@folio)", conexion);
+                var p = command.Parameters.Add("@folio", SqlDbType.VarChar);
+                p.Value = folio;
+
+                conexion.Open();
+
+                //execute reader
+                var reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    reader.Close();
+                    return model;
+                }
+
+                if (reader.Read())
+                    model = new FacturaDetalleModel
+                    {
+                        Id = Convert.ToInt32(reader.GetValue("Id")),
+                        Folio = Convert.ToString(reader.GetValue("Folio")),
+                        LugarExpedicion = Convert.ToString(reader.GetValue("LugarExpedicion")),
+                        FechaExpedicion = Convert.ToDateTime(reader.GetValue("FechaExpedicion")),
+                        Emisor = new ContribuyenteModel
+                        {
+                            Id = Convert.ToInt32(reader.GetValue("Emisor_Id")),
+                            Rfc = Convert.ToString(reader.GetValue("Emisor_RFC")),
+                            Nombre = Convert.ToString(reader.GetValue("Emisor_Nombre")),
+                            Domicilio = Convert.ToString(reader.GetValue("Emisor_Domicilio"))
+                        },
+                        Receptor = new ContribuyenteModel
+                        {
+                            Id = Convert.ToInt32(reader.GetValue("Receptor_Id")),
+                            Rfc = Convert.ToString(reader.GetValue("Receptor_RFC")),
+                            Nombre = Convert.ToString(reader.GetValue("Receptor_Nombre")),
+                            Domicilio = Convert.ToString(reader.GetValue("Receptor_Domicilio"))
+                        },
+                    };
+
+                if (reader.Read())
+                {
+                    reader.Close();
+                    throw new DataException("Se encontró más de una factura con el mismo folio.");
+
+                }
+
+                reader.Close();
+            }
+
+            model.Conceptos = GetConceptos(folio);
+
+            return model;
+        }
+
+        private IEnumerable<ConceptoModel> GetConceptos(string folio)
+        {
+            var conceptos = new List<ConceptoModel>();
+
+            using (var conexion = GetConnection())
+            {
+                var command = new SqlCommand("select * from [ej1].[tvf_GetFacturaConceptos](@folio)", conexion);
+                var p = command.Parameters.Add("@folio", SqlDbType.VarChar);
+                p.Value = folio;
+                conexion.Open();
+
+                var reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    reader.Close();
+                    return conceptos;
+                }
+
+                while (reader.Read())
+                {
+                    conceptos.Add(new ConceptoModel
+                    {
+                        Id = Convert.ToInt32(reader.GetValue("Id")),
+                        Descripcion = Convert.ToString(reader.GetValue("Descripcion")),
+                        Importe = Convert.ToDecimal(reader.GetValue("Importe")),
+                        Cantidad = Convert.ToInt32(reader.GetValue("Cantidad"))
+                    });
+                }
+
+                reader.Close();
+                return conceptos;
+            }
+        }
     }
 }

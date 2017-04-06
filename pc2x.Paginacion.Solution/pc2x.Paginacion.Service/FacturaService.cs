@@ -27,5 +27,18 @@ namespace pc2x.Paginacion.Service
         {
             return _facturaRepository.Count();
         }
+
+        public FacturaDetalleModel GetDetail(string folio)
+        {
+            if (string.IsNullOrWhiteSpace(folio))
+                throw new ArgumentOutOfRangeException(nameof(folio),
+                    "El Folio es incorrecto.");
+
+            if (folio.Length < 10 || folio.Length > 10)
+                throw new ArgumentOutOfRangeException(nameof(folio),
+                    "La longitud del Folio debe ser de 10 caracteres.");
+
+            return _facturaRepository.GetDetail(folio);
+        }
     }
 }

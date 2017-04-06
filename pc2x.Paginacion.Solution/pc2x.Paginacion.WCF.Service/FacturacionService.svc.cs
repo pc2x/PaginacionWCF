@@ -6,6 +6,7 @@ using pc2x.Paginacion.WCF.Core.Dtos;
 using System;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace pc2x.Paginacion.WCF.Service
 {
@@ -22,8 +23,13 @@ namespace pc2x.Paginacion.WCF.Service
         {
             try
             {
-                var list = _facturaService.GetAll(pageSize, page);
-                var total = _facturaService.Count();
+                var t1 = Task.Run(() => _facturaService.GetAll(pageSize, page));
+                var t2 = Task.Run(() => _facturaService.Count());
+
+                Task.WhenAll(t1, t2);
+
+                var list = t1.Result;
+                var total = t2.Result;
 
                 //here is where we can use AutoMapper
                 return new FacturasDto
@@ -52,6 +58,47 @@ namespace pc2x.Paginacion.WCF.Service
                 throw new FaultException(e.Message);
             }
 
+        }
+
+        public FacturaDetalleDto ObtenerDetalleFactura(string folio)
+        {
+            try
+            {
+                var model = _facturaService.GetDetail(folio);
+
+                //here is where we can use AutoMapper
+                return new FacturaDetalleDto
+                {
+                    Folio = model.Folio,
+                    FechaExpedicion = model.FechaExpedicion,
+                    LugarExpedicion = model.LugarExpedicion,
+                    Emisor = new ContribuyenteDto
+                    {
+                        Rfc = model.Emisor.Rfc,
+                        Nombre = model.Emisor.Nombre,
+                        Domicilio = model.Emisor.Domicilio
+
+                    },
+                    Receptor = new ContribuyenteDto
+                    {
+                        Rfc = model.Receptor.Rfc,
+                        Nombre = model.Receptor.Nombre,
+                        Domicilio = model.Receptor.Domicilio
+                    },
+                    Conceptos = model.Conceptos.Select(m => new ConceptoDto
+                    {
+                        Id = m.Id,
+                        Importe = m.Importe,
+                        Cantidad = m.Cantidad,
+                        Descripcion = m.Descripcion
+                    }),
+
+                };
+            }
+            catch (Exception e)
+            {
+                throw new FaultException(e.Message);
+            }
         }
     }
 }

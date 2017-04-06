@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IFacturacionService.cs" />
+    <Compile Include="Dtos\ConceptoDto.cs" />
+    <Compile Include="Dtos\ContribuyenteDto.cs" />
+    <Compile Include="Dtos\FacturaDetalleDto.cs" />
     <Compile Include="Dtos\FacturaDto.cs" />
     <Compile Include="Dtos\FacturasDto.cs" />
     <Compile Include="Dtos\PaginacionDto.cs" />

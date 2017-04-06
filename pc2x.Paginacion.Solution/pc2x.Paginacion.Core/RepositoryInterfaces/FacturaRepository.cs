@@ -7,5 +7,7 @@ namespace pc2x.Paginacion.Core.RepositoryInterfaces
     {
         IEnumerable<FacturaModel> GetAll(int pageSize, int page);
         int Count();
+
+        FacturaDetalleModel GetDetail(string folio);
     }
 }

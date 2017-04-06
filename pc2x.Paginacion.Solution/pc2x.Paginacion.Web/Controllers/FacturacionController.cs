@@ -1,4 +1,5 @@
 ﻿using pc2x.Paginacion.WCF.Core.Contracts;
+using pc2x.Paginacion.WCF.Core.Dtos;
 using pc2x.Paginacion.Web.ViewModels;
 using System;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace pc2x.Paginacion.Web.Controllers
                     Paginacion = new PaginacionInfoVm
                     {
                         PageSize = r.Paginacion.PageSize,
-                        CurrrentPage = r.Paginacion.CurrrentPage,
+                        CurrentPage = r.Paginacion.CurrrentPage,
                         TotalPages = r.Paginacion.TotalPages,
                         TotalRecords = r.Paginacion.TotalRecords
                     },
@@ -42,6 +43,8 @@ namespace pc2x.Paginacion.Web.Controllers
                         RfcReceptor = m.RfcReceptor
                     })
                 };
+
+                _channel.Close();
 
                 return View(model);
             }
@@ -57,10 +60,29 @@ namespace pc2x.Paginacion.Web.Controllers
             }
         }
 
-        //public ActionResult Detalle(string folio)
-        //{
+        public ActionResult Detalle(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return HttpNotFound();
 
-        //}
+            try
+            {
+                var model = _proxy.ObtenerDetalleFactura(id);
+                _channel.Close();
+                return View(model);
+            }
+            catch (FaultException e)
+            {
+                ViewBag.Error = e.Message;
+                return View(new FacturaDetalleDto());
+            }
+            catch (Exception)
+            {
+                ViewBag.Error = "Ocurrió un error inesperado, por favor intenta más tarde.";
+                return View(new FacturaDetalleDto());
+            }
+
+        }
 
 
     }

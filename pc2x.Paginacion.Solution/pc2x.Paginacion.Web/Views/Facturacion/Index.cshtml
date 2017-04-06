@@ -1,10 +1,5 @@
 ﻿@model pc2x.Paginacion.Web.ViewModels.FacturaListVm
 
-@section styles{
-    <style>
-    </style>
-}
-
 @if (ViewBag.Error != null)
 {
     <div class="row">
@@ -27,57 +22,63 @@
     <div class="col-xs-12 col-md-12">
         <table class="table">
             <thead>
-            <tr>
-                <th>Ver Detalle</th>
-                <th>Folio</th>
-                <th>RFC Emisor</th>
-                <th>RCF Receptor</th>
-                <th>Lugar de Expedición</th>
-                <th>Fecha de Expedición</th>
-            </tr>
+                <tr>
+                    <th>Ver Detalle</th>
+                    <th>Folio</th>
+                    <th>RFC Emisor</th>
+                    <th>RCF Receptor</th>
+                    <th>Lugar de Expedición</th>
+                    <th>Fecha de Expedición</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var f in Model.Facturas)
+                @foreach (var f in Model.Facturas)
             {
-                <tr>
-                    <td>
-                        <a class="btn btn-primary" href="@Url.Action("Detalle", new {id = f.Folio})">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </a>
-                    </td>
-                    <td>
-                        @f.Folio
-                    </td>
-                    <td>
-                        @f.RfcEmisor
-                    </td>
-                    <td>
-                        @f.RfcReceptor
-                    </td>
-                    <td>
-                        @f.LugarExpedicion
-                    </td>
-                    <td>
-                        @f.FechaExpedicion.ToShortDateString()
-                    </td>
-                </tr>
-            }
+                    <tr>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("Detalle", new {id = f.Folio})">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </a>
+                        </td>
+                        <td>
+                            @f.Folio
+                        </td>
+                        <td>
+                            @f.RfcEmisor
+                        </td>
+                        <td>
+                            @f.RfcReceptor
+                        </td>
+                        <td>
+                            @f.LugarExpedicion
+                        </td>
+                        <td>
+                            @f.FechaExpedicion.ToShortDateString()
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
+
+    <div class="col-xs-12 col-md-12" style="padding: 0 15px 10px;">
+        Mostrando Página @Model.Paginacion.CurrentPage
+        de @Model.Paginacion.PageSize registros
+        (@Model.Paginacion.TotalRecords registros en total)
+    </div>
     <div class="col-xs-12 col-md-10">
 
-        <ul class="pagination">
+        <ul class="pagination" style="margin-top: 0;">
 
             @{
                 var disabledAntButton = "";
-                if (Model.Paginacion.CurrrentPage <= 1)
+                if (Model.Paginacion.CurrentPage <= 1)
                 {
                     disabledAntButton = "disabled = disabled";
                 }
 
                 var disabledNextButton = "";
-                if (Model.Paginacion.CurrrentPage >= Model.Paginacion.TotalPages)
+                if (Model.Paginacion.CurrentPage >= Model.Paginacion.TotalPages)
                 {
                     disabledNextButton = "disabled = disabled";
                 }
@@ -95,17 +96,17 @@
             @for (var i = 1; i <= Model.Paginacion.TotalPages; i++)
             {
 
-                if (Model.Paginacion.CurrrentPage == i)
+                if (Model.Paginacion.CurrentPage == i)
                 {
                     <li class="active">
-                        @Html.ActionLink(i.ToString(), "Index", new {page = i, pageSize = Model.Paginacion.PageSize})
+                        @Html.ActionLink(i.ToString(), "Index", new { page = i, pageSize = Model.Paginacion.PageSize })
                     </li>
 
                 }
                 else
                 {
                     <li>
-                        @Html.ActionLink(i.ToString(), "Index", new {page = i, pageSize = Model.Paginacion.PageSize })
+                        @Html.ActionLink(i.ToString(), "Index", new { page = i, pageSize = Model.Paginacion.PageSize })
                     </li>
                 }
             }
@@ -119,9 +120,9 @@
 
     </div>
 
-    <div class="col-xs-12 col-md-2" style="margin: 20px 0;">
+    <div class="col-xs-12 col-md-2" style="margin: 0 0 20px;">
         Mostrar
-        <select id="pageSize_select" data-selected ="@Model.Paginacion.PageSize" data-page="@Model.Paginacion.CurrrentPage">
+        <select id="pageSize_select" data-selected="@Model.Paginacion.PageSize" data-page="@Model.Paginacion.CurrentPage">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
@@ -138,19 +139,19 @@
 
     <script>
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             var pageSize = $("#pageSize_select").data("selected");
             var selectedOption = $("#pageSize_select > option[value='" + pageSize + "']");
-            
-            if (selectedOption.length > 0) 
+
+            if (selectedOption.length > 0)
                 $(selectedOption[0]).prop("selected", "selected");
-            else 
+            else
                 $("#pageSize_select").append(
                     "<option selected = selected value=" + pageSize + ">" + pageSize + "</option>");
 
         });
 
-        $("body").on("change", "#pageSize_select", function() {
+        $("body").on("change", "#pageSize_select", function () {
 
             var pageSize = $(this.options[this.selectedIndex]).val();
             var page = $(this).data("page");

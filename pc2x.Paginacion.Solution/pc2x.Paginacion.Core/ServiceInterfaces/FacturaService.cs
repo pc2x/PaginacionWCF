@@ -8,5 +8,7 @@ namespace pc2x.Paginacion.Core.ServiceInterfaces
         IEnumerable<FacturaModel> GetAll(int pageSize, int page);
 
         int Count();
+
+        FacturaDetalleModel GetDetail(string folio);
     }
 }

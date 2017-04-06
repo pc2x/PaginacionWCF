@@ -8,5 +8,8 @@ namespace pc2x.Paginacion.WCF.Core.Contracts
     {
         [OperationContract]
         FacturasDto ObtenerFacturas(int pageSize, int page);
+
+        [OperationContract]
+        FacturaDetalleDto ObtenerDetalleFactura(string folio);
     }
 }

@@ -1,0 +1,195 @@
+﻿@model pc2x.Paginacion.WCF.Core.Dtos.FacturaDetalleDto
+
+@if (ViewBag.Error != null)
+{
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <h2>Factura Folio: # @Model.Folio</h2>
+    </div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-xs-12 col-md-6">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h2>
+                    <small>INFORMACIÓN DE LA FACTURA</small>
+                </h2>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Lugar de Expedición
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.LugarExpedicion
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Fecha de Expedición
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.FechaExpedicion.ToShortDateString()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h2>
+                    <small>INFORMACIÓN DEL EMISOR</small>
+                </h2>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            RFC
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Emisor.Rfc
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Nombre
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Emisor.Nombre
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Domicilio
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Emisor.Domicilio
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h2>
+                    <small>INFORMACIÓN DEL RECEPTOR</small>
+                </h2>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            RFC
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Receptor.Rfc
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Nombre
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Receptor.Nombre
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-xs-12 col-md-3">
+                            Domicilio
+                        </label>
+                        <div class="form-control-static col-xs-12 col-md-7">
+                            @Model.Receptor.Domicilio
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="col-xs-12 col-md-6">
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+                <h2>
+                    <small>CONCEPTOS</small>
+                </h2>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Importe</th>
+                            <th>Cantidad</th>
+                            <th>SubTotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model.Conceptos)
+                        {
+                            <tr>
+                                <td>
+                                    @c.Descripcion
+                                </td>
+                                <td>
+                                    @c.Importe
+                                </td>
+                                <td>
+                                    @c.Cantidad
+                                </td>
+                                <td>
+                                    @(c.Cantidad * c.Importe)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+        <div clas="row" style="border-top: 1px solid #ccc;">
+            <div class="col-xs-12 col-md-offset-8 col-md-4">
+                <div>
+                    <label>Total:</label>
+                    <span style="margin-left: 10px;">
+                        @Model.Conceptos.Sum(m => (m.Importe * m.Cantidad))
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+

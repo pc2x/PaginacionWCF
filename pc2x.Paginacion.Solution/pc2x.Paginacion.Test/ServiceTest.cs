@@ -15,5 +15,14 @@ namespace pc2x.Paginacion.Test
 
             Assert.IsNotNull(x);
         }
+
+        [TestMethod]
+        public void SERV_FacturaServicio_GetDetail_NotNull()
+        {
+            var s = new FacturaService(new FacturaRepository());
+            var x = s.GetDetail("F000000001");
+
+            Assert.IsNotNull(x);
+        }
     }
 }
