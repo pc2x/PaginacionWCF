@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFF9A5CF-C335-48C6-8A84-2622822F8974}</ProjectGuid>
+    <ProjectGuid>{9B295274-91A6-4730-88FA-F1F764AA9783}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>pc2x.Paginacion.Core</RootNamespace>
-    <AssemblyName>pc2x.Paginacion.Core</AssemblyName>
+    <RootNamespace>pc2x.Paginacion.Repository</RootNamespace>
+    <AssemblyName>pc2x.Paginacion.Repository</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,15 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessException.cs" />
-    <Compile Include="DomainModels\ConceptoModel.cs" />
-    <Compile Include="DomainModels\ContribuyenteModel.cs" />
-    <Compile Include="DomainModels\FacturaModel.cs" />
+    <Compile Include="Extensions\MyExtensions.cs" />
+    <Compile Include="FacturaRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RepositoryInterfaces\FacturaRepository.cs" />
-    <Compile Include="ServiceInterfaces\FacturaService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\pc2x.Paginacion.Core\pc2x.Paginacion.Core.csproj">
+      <Project>{bff9a5cf-c335-48c6-8a84-2622822f8974}</Project>
+      <Name>pc2x.Paginacion.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
